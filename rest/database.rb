@@ -1,5 +1,7 @@
 module Rest
   class Database < Resource
+    attr_reader :server
+
     nested_resource :_all_docs
     nested_resource :_revs_limit
     nested_resource :_changes
@@ -9,6 +11,7 @@ module Rest
     nested_resource :_compact
 
     def initialize(server, name)
+      @server = server
       super(server.connection, "/#{name}/")
     end
   end
