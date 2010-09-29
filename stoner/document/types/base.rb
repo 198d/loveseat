@@ -14,8 +14,8 @@ module Stoner
           @value = cast(value)
         end
 
-        def to_json
-          @value.to_json
+        def to_json(*args)
+          @value.to_json(*args)
         end
 
         private
