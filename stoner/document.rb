@@ -4,25 +4,21 @@ module Stoner
 
     def self.setup(klass, &block)
       support = Support.new(klass)
-      yield(support)
+      registry[klass.name] = support
+      yield(support.dsl)
       support
     end
 
     def self.put(db, object)
-      support = registry[object.class]
+      support = registry[object.class.name]
       raise "Not Registered" if support.nil?
       
       if object._id.nil?
         object._id = next_id(db.server, object.class)
       end
 
-      properties = support.properties.clone
-      properties.delete_if do |k,v|
-        v.get.nil?
-      end
-
       resource = Rest::Document.new(db, object._id)
-      response, body = resource.put(properties.to_json)
+      response, body = resource.put(support.to_doc(object))
 
       response.value
 
@@ -30,13 +26,18 @@ module Stoner
       object
     end
 
-    def self.delete(db, object)
-      resource = Rest::Document.new(db, object._id)
-      response, body = resource.delete(:query => {:rev => object._rev})
+    def self.get(db, id)
+      resource = Rest::Document.new(db, id)
+      response, body = resource.get
       response.value
+
+      klass, uuid = id.split(':')
+      support = registry[klass]
+      support.from_hash(body)
     end
 
     def self.all(db, klass)
+      support = registry[klass.name]
       resource = db._all_docs
       response, body = resource.get(:query => {:startkey => "#{klass.name}:".to_json,
                                                :endkey => "#{klass.name}:\u0fff".to_json,
@@ -44,12 +45,14 @@ module Stoner
       response.value
 
       body['rows'].map do |row|
-        object = klass.new
-        row['doc'].each do |k,v|
-          object.send("#{k}=", v)
-        end
-        object
+        support.from_hash(row['doc'])
       end
+    end
+
+    def self.delete(db, object)
+      resource = Rest::Document.new(db, object._id)
+      response, body = resource.delete(:query => {:rev => object._rev})
+      response.value
     end
 
     def self.next_id(server, klass)

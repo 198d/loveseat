@@ -2,26 +2,21 @@ module Stoner
   module Document
     module Types
       class Base
-        def initialize(value = nil)
-          @value = cast(value)
+        def initialize(default_value = nil)
+          @default_value = cast(default_value)
         end
 
-        def get
-          cast(@value)
+        def default_value
+          @default_value
         end
 
-        def set(value)
-          @value = cast(value)
+        def empty?(value)
+          cast(value).nil?
         end
 
-        def to_json(*args)
-          @value.to_json(*args)
+        def cast(value)
+          self.class.cast(value) unless value.nil?
         end
-
-        private
-          def cast(value)
-            self.class.cast(value) unless value.nil?
-          end
       end
     end
   end
