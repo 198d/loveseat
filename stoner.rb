@@ -18,23 +18,16 @@ def reload!
   load(__FILE__)
 end
 
-def make_implementation
-  klass = Class.new
-  Stoner::Document.setup(klass) do |s|
-    s.integer :count, 0
-    s.float :rating, 0
+class Parent
+  Stoner::Document.setup(self) do |s|
+    s.integer :count
+    s.float :rating
     s.string :name, "test"
     s.date :created, Date.today
     s.time :updated, Time.now
   end
-  klass.instance_eval do
-    def name
-      'Reference'
-    end
-  end
-  klass.new
 end
-$ref = make_implementation
+$ref = Parent.new
 
 def make_server
   c = Net::HTTP.new('localhost', 5984)
