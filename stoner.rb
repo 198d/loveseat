@@ -6,12 +6,8 @@ load 'rest/document.rb'
 load 'rest/database.rb'
 load 'rest/design_document.rb'
 load 'stoner/document.rb'
-load 'stoner/design_document.rb'
 load 'stoner/document/dsl.rb'
 load 'stoner/document/support.rb'
-load 'stoner/design_document/dsl.rb'
-load 'stoner/design_document/support.rb'
-load 'stoner/design_document/view_row.rb'
 load 'stoner/document/types/base.rb'
 load 'stoner/document/types/string.rb'
 load 'stoner/document/types/integer.rb'
@@ -21,16 +17,16 @@ load 'stoner/document/types/time.rb'
 load 'stoner/document/types/array.rb'
 load 'stoner/document/types/hash.rb'
 load 'stoner/document/types/raw.rb'
+load 'stoner/design_document.rb'
+load 'stoner/design_document/dsl.rb'
+load 'stoner/design_document/support.rb'
+load 'stoner/design_document/view_row.rb'
 
 def reload!
   load(__FILE__)
 end
 
-def make_server
-  c = Net::HTTP.new('localhost', 5984)
-  Rest::Server.new(c)
-end
-$server = make_server
+$server = Rest::Server.new('localhost', 5984)
 $db = Rest::Database.new($server, 'stoner')
 
 class Parent
