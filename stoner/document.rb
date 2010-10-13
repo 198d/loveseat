@@ -75,7 +75,7 @@ module Stoner
       end
 
     end
-    extend Api
+    extend API
   end
 end
 
