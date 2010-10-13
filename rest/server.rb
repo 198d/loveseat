@@ -7,8 +7,8 @@ module Rest
     nested_resource :_stats
     nested_resource :_active_tasks
 
-    def initialize(connection)
-      super(connection, '/')
+    def initialize(host, port)
+      super(Net::HTTP.new(host, port), '/')
     end
   end
 end
