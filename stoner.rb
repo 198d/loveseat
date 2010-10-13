@@ -42,12 +42,11 @@ class Parent
 end
 $ref = Parent.new
 
-
-
 class View
   Stoner::DesignDocument.setup(self) do |s|
     s.view :test,
-      :map => "function(doc) { emit(doc._id, 1); }"
+      :map => "function(doc) { emit(doc._id.split(':')[0], 1); }",
+      :reduce => "function(keys, values) { return sum(values); }"
   end
 end
 $viewref = View.new
