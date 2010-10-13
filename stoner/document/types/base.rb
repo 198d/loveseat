@@ -2,16 +2,14 @@ module Stoner
   module Document
     module Types
       class Base
+        attr_reader :default_value
+
         def initialize(default_value = nil)
           @default_value = cast(default_value)
         end
 
-        def default_value
-          @default_value
-        end
-
-        def empty?(value)
-          cast(value).nil?
+        def self.empty?(value)
+          value.nil?
         end
 
         def cast(value)

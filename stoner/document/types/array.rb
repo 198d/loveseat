@@ -5,6 +5,10 @@ module Stoner
         def self.cast(value)
           value.to_a
         end
+        
+        def self.empty?(value)
+          value.nil? || value.empty?
+        end
       end
     end
   end
