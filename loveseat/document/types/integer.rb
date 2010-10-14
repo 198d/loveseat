@@ -1,4 +1,4 @@
-module Stoner
+module Loveseat
   module Document
     module Types
       class Integer < Base

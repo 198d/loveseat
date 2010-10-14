@@ -1,4 +1,4 @@
-module Stoner
+module Loveseat
   module Document
     class DSL
       def initialize(support)

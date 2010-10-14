@@ -1,6 +1,6 @@
 require 'date'
 
-module Stoner
+module Loveseat
   module Document
     module Types
       class Date < Base

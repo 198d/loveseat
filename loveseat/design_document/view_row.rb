@@ -1,7 +1,7 @@
-module Stoner
+module Loveseat
   module DesignDocument
     class ViewRow
-      Stoner::Document.setup(self, :abstract => true) do |s|
+      Loveseat::Document.setup(self, :abstract => true) do |s|
         s.string :id
         s.raw :key
         s.raw :value

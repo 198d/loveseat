@@ -1,4 +1,4 @@
-module Stoner
+module Loveseat
   module DesignDocument
     class DSL < Document::DSL
       def view(name, functions = {})

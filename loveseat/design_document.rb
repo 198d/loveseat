@@ -1,4 +1,4 @@
-module Stoner
+module Loveseat
   module DesignDocument 
     @@registry = {}
 

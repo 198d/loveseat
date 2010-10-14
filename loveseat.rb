@@ -5,32 +5,32 @@ load 'rest/server.rb'
 load 'rest/document.rb'
 load 'rest/database.rb'
 load 'rest/design_document.rb'
-load 'stoner/document.rb'
-load 'stoner/document/dsl.rb'
-load 'stoner/document/support.rb'
-load 'stoner/document/types/base.rb'
-load 'stoner/document/types/string.rb'
-load 'stoner/document/types/integer.rb'
-load 'stoner/document/types/float.rb'
-load 'stoner/document/types/date.rb'
-load 'stoner/document/types/time.rb'
-load 'stoner/document/types/array.rb'
-load 'stoner/document/types/hash.rb'
-load 'stoner/document/types/raw.rb'
-load 'stoner/design_document.rb'
-load 'stoner/design_document/dsl.rb'
-load 'stoner/design_document/support.rb'
-load 'stoner/design_document/view_row.rb'
+load 'loveseat/document.rb'
+load 'loveseat/document/dsl.rb'
+load 'loveseat/document/support.rb'
+load 'loveseat/document/types/base.rb'
+load 'loveseat/document/types/string.rb'
+load 'loveseat/document/types/integer.rb'
+load 'loveseat/document/types/float.rb'
+load 'loveseat/document/types/date.rb'
+load 'loveseat/document/types/time.rb'
+load 'loveseat/document/types/array.rb'
+load 'loveseat/document/types/hash.rb'
+load 'loveseat/document/types/raw.rb'
+load 'loveseat/design_document.rb'
+load 'loveseat/design_document/dsl.rb'
+load 'loveseat/design_document/support.rb'
+load 'loveseat/design_document/view_row.rb'
 
 def reload!
   load(__FILE__)
 end
 
 $server = Rest::Server.new('localhost', 5984)
-$db = Rest::Database.new($server, 'stoner')
+$db = Rest::Database.new($server, 'loveseat')
 
 class Parent
-  Stoner::Document.setup(self) do |s|
+  Loveseat::Document.setup(self) do |s|
     s.integer :count
     s.float :rating
     s.string :name, "test"
@@ -43,13 +43,13 @@ end
 $ref = Parent.new
 
 class View
-  Stoner::DesignDocument.setup(self) do |s|
+  Loveseat::DesignDocument.setup(self) do |s|
     s.view :test,
       :map => "function(doc) { emit(doc._id.split(':')[0], 1); }",
       :reduce => "function(keys, values) { return sum(values); }"
   end
 end
 $viewref = View.new
-$viewref._id = Stoner::DesignDocument.next_id($db.server, $viewref)
-$viewref._rev = Stoner::DesignDocument.get($db, $viewref._id)._rev
+$viewref._id = Loveseat::DesignDocument.next_id($db.server, $viewref)
+$viewref._rev = Loveseat::DesignDocument.get($db, $viewref._id)._rev
 

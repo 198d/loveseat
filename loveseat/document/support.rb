@@ -1,4 +1,4 @@
-module Stoner
+module Loveseat
   module Document
     class Support
       attr_accessor :properties, :dsl

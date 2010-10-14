@@ -1,6 +1,6 @@
 require 'time'
 
-module Stoner
+module Loveseat
   module Document
     module Types
       class Time < Base
