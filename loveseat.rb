@@ -44,12 +44,10 @@ end
 $ref = Parent.new
 
 class View
-  Loveseat::DesignDocument.setup(self) do |s|
+  Loveseat::DesignDocument.setup(self, :singleton => true) do |s|
     s.view :test,
       :map => "function(doc) { emit(doc._id.split(':')[0], 1); }",
       :reduce => "function(keys, values) { return sum(values); }"
   end
 end
-$viewref = View.new
-$viewref._rev = Loveseat::DesignDocument.get($db, $viewref._id)._rev
 

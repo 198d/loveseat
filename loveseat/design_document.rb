@@ -1,8 +1,7 @@
 module Loveseat
   module DesignDocument 
     def self.view(db, design_document, name, options = {})
-      klass = design_document.class.name
-      resource = Rest::DesignDocument.new(db, klass)
+      resource = Rest::DesignDocument.new(db, design_document.name)
       view_resource = resource._view(name)
 
       keys = options.delete(:keys)

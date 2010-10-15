@@ -11,12 +11,9 @@ module Loveseat
         @properties = {}
         @dsl = DSL.new(self)
         @abstract = !!options[:abstract]
-        
-        klass.class_eval("
-          def __loveseat_instance_adapter
-            @__loveseat_instance_adapter ||= Loveseat::Document::InstanceAdapter.new(self.class.name)
-          end
-        ")
+        @singleton = !!options[:singleton]
+
+        add_instance_adapter_accessor!
 
         unless @abstract
           add_property(:_id, Property::String)
@@ -26,15 +23,8 @@ module Loveseat
 
       def add_property(name,type,default = nil)
         method = name.to_sym
-        @properties[name] = [type, default]
-        @klass.class_eval do
-          define_method(method) do
-            __loveseat_instance_adapter[method].get
-          end
-          define_method("#{method}=".to_sym) do |value|
-            __loveseat_instance_adapter[method].set(value)
-          end
-        end
+        @properties[method] = [type, default]
+        add_instance_methods!(method)
       end
 
       def to_doc(instance)
@@ -47,7 +37,12 @@ module Loveseat
       end
 
       def from_hash(doc)
-        object = @klass.new
+        object = nil
+        if singleton?
+          object = @klass
+        else
+          object = @klass.new
+        end
         properties.each do |k,v|
           object.send(:"#{k}=", doc[k.to_s])
         end
@@ -63,9 +58,45 @@ module Loveseat
         map
       end
 
+      def singleton?
+        @singleton
+      end
+
       def abstract?
         @abstract
       end
+
+      private
+
+        def add_instance_adapter_accessor!
+          method = <<-SOURCE
+            def __loveseat_instance_adapter
+              class_name = ( self.instance_of?(Class) ) ? self.name : self.class.name
+              @__loveseat_instance_adapter ||= Loveseat::Document::InstanceAdapter.new(class_name)
+            end
+          SOURCE
+          eval_appropriately(method)
+        end
+
+        def add_instance_methods!(method)
+          methods = <<-SOURCE
+            def #{method}
+              __loveseat_instance_adapter["#{method}".to_sym].get
+            end
+            def #{method}=(value)
+              __loveseat_instance_adapter["#{method}".to_sym].set(value)
+            end
+          SOURCE
+          eval_appropriately(methods)
+        end
+        
+        def eval_appropriately(arg)
+          if singleton?
+            @klass.instance_eval(arg)
+          else
+            @klass.class_eval(arg)
+          end
+        end
     end
   end
 end
