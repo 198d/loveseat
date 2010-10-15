@@ -8,6 +8,7 @@ load 'rest/design_document.rb'
 load 'loveseat/document.rb'
 load 'loveseat/document/dsl.rb'
 load 'loveseat/document/support.rb'
+load 'loveseat/document/instance_adapter.rb'
 load 'loveseat/document/types/base.rb'
 load 'loveseat/document/types/string.rb'
 load 'loveseat/document/types/integer.rb'
@@ -50,6 +51,5 @@ class View
   end
 end
 $viewref = View.new
-$viewref._id = Loveseat::DesignDocument.next_id($db.server, $viewref)
 $viewref._rev = Loveseat::DesignDocument.get($db, $viewref._id)._rev
 

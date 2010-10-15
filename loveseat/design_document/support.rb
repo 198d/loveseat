@@ -1,16 +1,18 @@
 module Loveseat
   module DesignDocument
     class Support < Document::Support
-      def initialize(*args)
-        super(*args)
+      def initialize(klass, options = {})
+        super(klass, options)
         @dsl = DSL.new(self)
-        add_property(:views, Document::Types::Hash.new({}))
+        add_property(:views, Document::Types::Hash, {})
+        properties[:_id][DEFAULT] = DesignDocument.generate_id(klass)
       end
 
       def add_view(name, options = {})
-        property = properties.delete(:views)
-        views = property.default_value.merge(name.to_sym => options)
-        add_property(:views, Document::Types::Hash.new(views))
+        type, default = properties[:views]
+        default.merge!(
+          name => options
+        )
       end 
     end
   end

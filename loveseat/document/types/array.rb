@@ -6,8 +6,8 @@ module Loveseat
           value.to_a
         end
         
-        def self.empty?(value)
-          value.nil? || value.empty?
+        def empty?
+          @value.nil? || @value.empty?
         end
       end
     end

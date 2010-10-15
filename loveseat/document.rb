@@ -22,13 +22,13 @@ module Loveseat
     module API
       def setup(klass, options = {}, &block)
         support = self::Support.new(klass, options)
-        registry[klass.name] = support
+        Document.registry[klass.name] = support
         yield(support.dsl) if block_given?
         support
       end
 
       def put(db, object)
-        support = registry[object.class.name]
+        support = Document.registry[object.class.name]
         raise "Not Registered" if support.nil?
         raise "Abstract Document" if support.abstract?
         
@@ -51,12 +51,12 @@ module Loveseat
         response.value
 
         klass = resolve(id)
-        support = registry[klass]
+        support = Document.registry[klass]
         support.from_hash(body)
       end
 
       def all(db, klass)
-        support = registry[klass.name]
+        support = Document.registry[klass.name]
         resource = db._all_docs
         response, body = resource.get(:query => {:startkey => "#{klass.name}:".to_json,
                                                  :endkey => "#{klass.name}:\u0fff".to_json,

@@ -1,11 +1,5 @@
 module Loveseat
   module DesignDocument 
-    @@registry = {}
-
-    def self.registry
-      @@registry
-    end
-
     def self.view(db, design_document, name, options = {})
       klass = design_document.class.name
       resource = Rest::DesignDocument.new(db, klass)
@@ -25,8 +19,8 @@ module Loveseat
       end
     end
 
-    def self.next_id(server, instance)
-      "_design/#{instance.class.name}"
+    def self.generate_id(klass)
+      "_design/#{klass.name}"
     end
 
     def self.resolve(id)
