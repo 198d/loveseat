@@ -5,7 +5,7 @@ module Loveseat
         super(klass, options)
         @dsl = DSL.new(self)
         add_property(:views, Document::Property::Hash, {})
-        properties[:_id][DEFAULT] = DesignDocument.generate_id(klass)
+        alter_property(:_id, Document::Property::String, DesignDocument.generate_id(klass))
       end
 
       def add_view(name, options = {})

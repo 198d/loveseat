@@ -22,9 +22,13 @@ module Loveseat
       end
 
       def add_property(name,type,default = nil)
-        method = name.to_sym
-        @properties[method] = [type, default]
-        add_instance_methods!(method)
+        name = name.to_sym
+        alter_property(name,type,default)
+        add_instance_methods!(name)
+      end
+
+      def alter_property(name,type,default = nil)
+        @properties[name] = [type, default]
       end
 
       def to_doc(instance)

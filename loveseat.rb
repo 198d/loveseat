@@ -42,6 +42,7 @@ class Parent
   end
 end
 $ref = Parent.new
+$ref2 = Parent.new
 
 class View
   Loveseat::DesignDocument.setup(self, :singleton => true) do |s|

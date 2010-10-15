@@ -1,5 +1,11 @@
 module Loveseat
   module DesignDocument 
+    Document.add_resolver(/_design\/([A-Za-z:]+)/)
+
+    def self.setup(klass, options = {}, &block)
+      Document.setup(klass, { :support => Support.new(klass, options) }, &block)
+    end
+    
     def self.view(db, design_document, name, options = {})
       resource = Rest::DesignDocument.new(db, design_document.name)
       view_resource = resource._view(name)
@@ -21,11 +27,5 @@ module Loveseat
     def self.generate_id(klass)
       "_design/#{klass.name}"
     end
-
-    def self.resolve(id)
-      prefix, klass = id.split('/')
-      klass
-    end
-    extend Document::API
   end
 end
