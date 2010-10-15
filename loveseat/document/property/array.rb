@@ -1,11 +1,11 @@
 module Loveseat
   module Document
-    module Types
-      class Hash < Base
+    module Property
+      class Array < Base
         def self.cast(value)
-          value.to_hash
+          value.to_a
         end
-
+        
         def empty?
           @value.nil? || @value.empty?
         end

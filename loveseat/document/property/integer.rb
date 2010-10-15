@@ -1,6 +1,6 @@
 module Loveseat
   module Document
-    module Types
+    module Property
       class Integer < Base
         def self.cast(value)
           value.to_i

@@ -1,6 +1,6 @@
 module Loveseat
   module Document
-    module Types
+    module Property
       class Raw < Base
         def self.cast(value)
           value

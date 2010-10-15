@@ -1,15 +1,15 @@
-require 'time'
+require 'date'
 
 module Loveseat
   module Document
-    module Types
-      class Time < Base
+    module Property
+      class Date < Base
         def self.cast(value)
-          if value.is_a?(::Time)
+          if value.is_a?(::Date)
             return value
           end
 
-          ::Time.parse(value)
+          ::Date.parse(value)
         end
       end
     end

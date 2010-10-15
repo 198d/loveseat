@@ -1,9 +1,9 @@
 module Loveseat
   module Document
-    module Types
-      class Float < Base
+    module Property
+      class String < Base
         def self.cast(value)
-          value.to_f
+          value.to_s
         end
       end
     end

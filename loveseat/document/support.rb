@@ -19,8 +19,8 @@ module Loveseat
         ")
 
         unless @abstract
-          add_property(:_id, Types::String)
-          add_property(:_rev, Types::String)
+          add_property(:_id, Property::String)
+          add_property(:_rev, Property::String)
         end
       end
 

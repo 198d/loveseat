@@ -1,6 +1,6 @@
 module Loveseat
   module Document
-    module Types
+    module Property
       class Base
         attr_reader :value
 

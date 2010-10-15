@@ -6,35 +6,35 @@ module Loveseat
       end
 
       def integer(name, default = nil)
-        @support.add_property(name, Types::Integer, default)
+        @support.add_property(name, Property::Integer, default)
       end
 
       def string(name, default = nil)
-        @support.add_property(name, Types::String, default)
+        @support.add_property(name, Property::String, default)
       end
 
       def float(name, default = nil)
-        @support.add_property(name, Types::Float, default)
+        @support.add_property(name, Property::Float, default)
       end
       
       def date(name, default = nil)
-        @support.add_property(name, Types::Date, default)
+        @support.add_property(name, Property::Date, default)
       end
       
       def time(name, default = nil)
-        @support.add_property(name, Types::Time, default)
+        @support.add_property(name, Property::Time, default)
       end
 
       def hash(name, default = nil)
-        @support.add_property(name, Types::Hash, default)
+        @support.add_property(name, Property::Hash, default)
       end
       
       def array(name, default = nil)
-        @support.add_property(name, Types::Array, default)
+        @support.add_property(name, Property::Array, default)
       end
       
       def raw(name, default = nil)
-        @support.add_property(name, Types::Raw, default)
+        @support.add_property(name, Property::Raw, default)
       end
     end
   end

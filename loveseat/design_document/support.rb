@@ -4,7 +4,7 @@ module Loveseat
       def initialize(klass, options = {})
         super(klass, options)
         @dsl = DSL.new(self)
-        add_property(:views, Document::Types::Hash, {})
+        add_property(:views, Document::Property::Hash, {})
         properties[:_id][DEFAULT] = DesignDocument.generate_id(klass)
       end
 
