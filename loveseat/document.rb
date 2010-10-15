@@ -85,6 +85,7 @@ module Loveseat
       resource = Rest::Document.new(db, object._id)
       response, body = resource.delete(:query => {:rev => object._rev})
       response.value
+      object._rev = nil
     end
   end
 end
