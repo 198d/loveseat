@@ -22,16 +22,24 @@ load 'loveseat/design_document.rb'
 load 'loveseat/design_document/dsl.rb'
 load 'loveseat/design_document/support.rb'
 load 'loveseat/design_document/view_row.rb'
+load 'loveseat/model.rb'
+load 'loveseat/view_set.rb'
 
 def reload!
   load(__FILE__)
 end
 
-$server = Rest::Server.new('localhost', 5984)
-$db = Rest::Database.new($server, 'loveseat')
+Loveseat::Model.connection = {
+  :host => 'localhost',
+  :port => 5984,
+  :database => 'loveseat'
+}
 
-class Parent
-  Loveseat::Document.setup(self) do |s|
+$server = Loveseat::Model.server
+$db = Loveseat::Model.database
+
+class Parent < Loveseat::Model
+  setup do |s|
     s.integer :count
     s.float :rating
     s.string :name, "test"
@@ -44,8 +52,8 @@ end
 $ref = Parent.new
 $ref2 = Parent.new
 
-class View
-  Loveseat::DesignDocument.setup(self, :singleton => true) do |s|
+class View < Loveseat::ViewSet
+  setup do |s|
     s.view :test,
       :map => "function(doc) { emit(doc._id.split(':')[0], 1); }",
       :reduce => "function(keys, values) { return sum(values); }"
