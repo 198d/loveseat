@@ -8,6 +8,12 @@ module Loveseat
         alter_property(:_id, Document::Property::String, DesignDocument.generate_id(klass))
       end
 
+      def from_hash(doc)
+        object = super(doc)
+        object.views = properties[:views][DEFAULT]
+        object
+      end
+
       def add_view(name, options = {})
         type, default = properties[:views]
         default.merge!(
