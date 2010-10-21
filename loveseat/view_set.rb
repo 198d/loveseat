@@ -2,27 +2,35 @@ module Loveseat
   class ViewSet < Model
     def self.setup(options = {}, &block)
       options = options.merge(:singleton => true)
-      Loveseat::DesignDocument.setup(self, options, &block)
+      DesignDocument.setup(self, options, &block)
     end
+   
+    def self.view(name, options = {})
+      DesignDocument.view(self.database, self, name, options)
+    end 
 
     def self.put
-      Loveseat::Document.put(self.database, self)
+      Document.put(self.database, self)
     end
 
     def self.delete
-      Loveseat::Document.delete(self.database, self)
+      Document.delete(self.database, self)
     end
 
     def self.latest!
       begin
         put
       rescue 
-        Loveseat::Document.get(self.database, self._id)
+        Document.get(self.database, self._id)
       end
     end
   
     def self.get(*args)
       latest!
+    end
+
+    def self.all
+      DesignDocument.all(self.database)       
     end
 
     private :put, :delete

@@ -6,6 +6,20 @@ module Loveseat
       Document.setup(klass, { :support => Support.new(klass, options) }, &block)
     end
     
+    def self.all(db)
+      resource = db._all_docs
+      response, body = resource.get(:query => {:startkey => "_design/".to_json,
+                                               :endkey => "_design/\ufff0".to_json,
+                                               :include_docs => true})
+      response.value
+
+      body['rows'].map do |row|
+        klass = Document.resolve(row['id'])
+        support = Document.registry[klass]
+        support.from_hash(row['doc'])
+      end
+    end
+
     def self.view(db, design_document, name, options = {})
       resource = Rest::DesignDocument.new(db, design_document.name)
       view_resource = resource._view(name)

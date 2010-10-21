@@ -72,7 +72,7 @@ module Loveseat
       support = Document.registry[klass.name]
       resource = db._all_docs
       response, body = resource.get(:query => {:startkey => "#{klass.name}:".to_json,
-                                               :endkey => "#{klass.name}:\u0fff".to_json,
+                                               :endkey => "#{klass.name}:\ufff0".to_json,
                                                :include_docs => true})
       response.value
 

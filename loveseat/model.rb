@@ -7,22 +7,26 @@ module Loveseat
     end
 
     def put
-      Loveseat::Document.put(self.class.database, self)
+      Document.put(self.class.database, self)
     end
   
     def delete
-      Loveseat::Document.delete(self.class.database, self)
+      Document.delete(self.class.database, self)
     end 
 
     def self.get(id)
       unless id[self.name]
         id = [self.name, id].join(':')
       end
-      Loveseat::Document.get(self.database, id)
+      Document.get(self.database, id)
+    end
+
+    def self.all
+      Document.all(self.database, self)
     end
 
     def self.setup(options = {}, &block)
-      Loveseat::Document.setup(self, options, &block)
+      Document.setup(self, options, &block)
     end
 
     def self.server
