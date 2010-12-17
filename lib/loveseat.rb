@@ -1,4 +1,3 @@
-$:.unshift(File.dirname(__FILE__))
 require 'core_ext/hash.rb'
 require 'rest/resource.rb'
 require 'rest/server.rb'
