@@ -39,22 +39,22 @@ $server = Loveseat::Model.server
 $db = Loveseat::Model.database
 
 class Parent < Loveseat::Model
-  setup do |s|
-    s.integer :count
-    s.float :rating
-    s.string :name, "test"
-    s.date :created, Date.today
-    s.time :updated, Time.now
-    s.array :collection
-    s.hash :keyvalue
+  setup do
+    integer :count
+    float :rating
+    string :name, "test"
+    date :created, Date.today
+    time :updated, Time.now
+    array :collection
+    hash :keyvalue
   end
 end
 $ref = Parent.new
 $ref2 = Parent.new
 
 class View < Loveseat::ViewSet
-  setup do |s|
-    s.view :test,
+  setup do
+    view :test,
       :map => "function(doc) { emit(doc._id.split(':')[0], 1); }",
       :reduce => "function(keys, values) { return sum(values); }"
   end

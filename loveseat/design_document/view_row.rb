@@ -1,11 +1,11 @@
 module Loveseat
   module DesignDocument
     class ViewRow
-      Loveseat::Document.setup(self, :abstract => true) do |s|
-        s.string :id
-        s.raw :key
-        s.raw :value
-        s.hash :doc
+      Loveseat::Document.setup(self, :abstract => true) do 
+        string :id
+        raw :key
+        raw :value
+        hash :doc
       end
 
       def self.from_hash(doc)

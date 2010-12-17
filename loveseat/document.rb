@@ -35,7 +35,7 @@ module Loveseat
       support = options.delete(:support) ||
                   Support.new(klass, options)
       Document.registry[klass.name] = support
-      yield(support.dsl) if block_given?
+      support.dsl.instance_eval(&block)
       support
     end
 
