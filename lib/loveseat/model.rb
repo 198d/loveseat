@@ -2,7 +2,9 @@ module Loveseat
   class Model
     def self.connection=(connection_hash)
       @@server = Rest::Server.new(connection_hash[:host],
-                                connection_hash[:port])
+                                connection_hash[:port],
+                                connection_hash[:user],
+                                connection_hash[:password])
       @@database = Rest::Database.new(@@server, connection_hash[:database])
     end
 

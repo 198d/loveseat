@@ -12,7 +12,7 @@ module Rest
 
     def initialize(server, name)
       @server = server
-      super(server.connection, "/#{name}/")
+      super(server.connection, "/#{name}/", server.username, server.password)
     end
   end
 end

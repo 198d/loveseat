@@ -6,13 +6,15 @@ module Rest
   class Resource
     attr_reader :connection
 
-    def initialize(connection, path = '/')
+    def initialize(connection, path = '/', username=nil, password=nil)
       @connection = connection
       uri = [ 'http://',
               [connection.address,
                connection.port].join(':'), 
               path ].join
       @uri = URI.parse(uri)
+      @username = username
+      @password = password
     end
 
     def self.nested_resource(name)
@@ -65,6 +67,10 @@ module Rest
           request_body
         else
           request_body.to_json
+        end
+
+        if @username and @password
+          request.basic_auth(@username, @password)
         end
         
         response = @connection.start do |http|
