@@ -22,6 +22,7 @@ module Loveseat
         put
       rescue 
         Document.get(self.database, self._id)
+        retry
       end
     end
   
