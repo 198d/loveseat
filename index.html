@@ -12,7 +12,6 @@
 		body {
   		margin-top: 1.0em;
   		background-color: #ffffff;
-		  font-family: "Nobile,Arial,FreeSans"; 
   		color: #000000;
     }
     #container {
@@ -20,7 +19,7 @@
       width: 700px;
     }
      
-    div, p, li { font-family: "Nobile"; }
+    p, li { font-family: "Nobile"; }
     h1, h2, h3, h4 {  font-family:"Droid Serif"; }
 		h1 { font-size: 3.8em; color: #103d66; margin-bottom: 3px;}
 		h1 .small { font-size: 0.4em; }
@@ -30,7 +29,7 @@
     a { color: #103d66; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic; font-family: 'Droid Serif'}
     .download { float: right; }
-		pre { background: #000; color: #fff; padding: 15px;}
+		pre.command { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
     ul { list-style: none; padding-left:20px; }
@@ -79,7 +78,9 @@
       </ul>
     </p>
     <h2>Install</h2>
-    <pre>$ gem install loveseat</pre>
+    <p><pre class='command'>$ gem install loveseat</pre></p>
+    <h2>Example</h2>
+    <script src="https://gist.github.com/751146.js"> </script>
     <h2>License</h2>
     <p>Loveseat is distributed under the MIT License, copyright © 2010</p>
     <h2>Authors</h2>
@@ -93,7 +94,7 @@
     </p>
     <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
       by running:
-      <pre>$ git clone git://github.com/198d/loveseat</pre>
+      <pre class='command'>$ git clone git://github.com/198d/loveseat</pre>
     </p>
   </div>
 </body>
