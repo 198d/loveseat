@@ -6,29 +6,36 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 	<title>198d/loveseat @ GitHub</title>
-	
+  
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:italic|Nobile:italic|Droid+Serif|Nobile">
 	<style type="text/css">
 		body {
   		margin-top: 1.0em;
-  		background-color: #efc299;
-		  font-family: "Helvetica,Arial,FreeSans";
+  		background-color: #ffffff;
+		  font-family: "Nobile,Arial,FreeSans"; 
   		color: #000000;
     }
     #container {
       margin: 0 auto;
       width: 700px;
     }
-		h1 { font-size: 3.8em; color: #103d66; margin-bottom: 3px; }
+     
+    div, p, li { font-family: "Nobile"; }
+    h1, h2, h3, h4 {  font-family:"Droid Serif"; }
+		h1 { font-size: 3.8em; color: #103d66; margin-bottom: 3px;}
 		h1 .small { font-size: 0.4em; }
 		h1 a { text-decoration: none }
 		h2 { font-size: 1.5em; color: #103d66; }
     h3 { text-align: center; color: #103d66; }
     a { color: #103d66; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic; font-family: 'Droid Serif'}
     .download { float: right; }
 		pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
+    ul { list-style: none; padding-left:20px; }
+    li h4 { margin-left:-20px; }
+    li { font-style:italic; }
 	</style>
 	
 </head>
@@ -52,22 +59,33 @@
       Simple Couch Client / Object Document Mapper
     </div>
 
-    <p>Small, lightweight CouchDB client and object document mapper.  Library is meant to be kept lean while still exposing the most powerful features of the database.  
-
-Goals
-* Let Couch do the work.  
-* Stay out of the way.
-</p><h2>Dependencies</h2>
-<p>json</p>
-<h2>Install</h2>
-<p>gem install loveseat</p>
-<h2>License</h2>
-<p>Loveseat is distributed under the MIT License, copyright © 2010</p>
-<h2>Authors</h2>
-<p>John MacKenzie (john@nineteeneightd.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>John MacKenzie (john@nineteeneightd.com)<br/>      </p>
-
+    <p>Small, lightweight CouchDB client and object document mapper.  Library is meant to be kept lean while still exposing the most powerful features of the database.  Took a little inspiration from <a href='http://github.com/outoftime/sunspot'>sunspot</a>.</p>
+    <h2>Goals</h2>
+      <ul>
+        <li>
+          <h4>Let Couch do the work</h4>
+          Do as little as possible in actual library.  Make Couch handle all of the heavy lifting.  
+        </li>
+        <li>
+          <h4>Stay out of the way</h4>
+          Avoid as much as possible interfering with other libraries allowing choice amongst things like
+          validations, callbacks, etc...
+        </li>
+        <li>
+          <h4>Treat design documents as first-class citizens</h4>
+          Expose the design document at the same level as a normal document allowing for full exposure
+          to the design document API.
+        </li>
+      </ul>
+    </p>
+    <h2>Dependencies</h2>
+    <p>json (1.4.6)</p>
+    <h2>Install</h2>
+    <pre>$ gem install loveseat</pre>
+    <h2>License</h2>
+    <p>Loveseat is distributed under the MIT License, copyright © 2010</p>
+    <h2>Authors</h2>
+    <p>John MacKenzie</p>
 
     <h2>Download</h2>
     <p>
@@ -79,13 +97,6 @@ Goals
       by running:
       <pre>$ git clone git://github.com/198d/loveseat</pre>
     </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/198d/loveseat">198d/loveseat</a>
-    </div>
-
   </div>
-
-  
 </body>
 </html>
