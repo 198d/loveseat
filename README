@@ -1,0 +1,10 @@
+== Loveseat
+
+Small, lightweight CouchDB client and object document mapper. Library is meant to be kept lean while still exposing the most powerful features of the database. Took a little inspiration from sunspot.
+
+== Future
+
+- Start testing as development continues
+- Related and Embeded documents
+- Cast view rows to appropriate model class
+
