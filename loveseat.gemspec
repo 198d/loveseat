@@ -9,5 +9,8 @@ spec = Gem::Specification.new do |s|
   s.homepage = 'http://198d.github.com/loveseat'
   s.email = 'john@nineteeneightd.com'
 
+  s.add_development_dependency('fakeweb', '1.3.0')
+  s.add_development_dependency('rr', '1.0.2')
+
   s.add_dependency('json', '1.4.6')
 end
