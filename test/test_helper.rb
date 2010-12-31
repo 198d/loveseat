@@ -1,9 +1,11 @@
 require 'rubygems'
+require 'bundler'
+
+Bundler.setup
+
 require 'test/unit'
 require 'fakeweb'
 require 'rr'
-
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'loveseat'
 
 FakeWeb.allow_net_connect = false
