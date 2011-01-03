@@ -6,6 +6,7 @@ Bundler.setup
 require 'test/unit'
 require 'fakeweb'
 require 'rr'
+require 'shoulda'
 require 'loveseat'
 
 FakeWeb.allow_net_connect = false

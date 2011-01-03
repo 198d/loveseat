@@ -5,17 +5,26 @@ require 'json'
 module Loveseat
   module Rest
     class Resource
-      attr_reader :connection
+      attr_reader :connection, :uri
 
-      def initialize(connection, path = '/', username=nil, password=nil)
+      def initialize(connection, path = '/', user=nil, password=nil)
         @connection = connection
+        
+        auth = ''
+        if (user and password) or user
+          auth << user
+          if password
+            auth << ':' << password
+          end
+          auth << '@'
+        end
+
         uri = [ 'http://',
+                auth,
                 [connection.address,
                  connection.port].join(':'), 
                 path ].join
         @uri = URI.parse(uri)
-        @username = username
-        @password = password
       end
 
       def self.nested_resource(name)
@@ -25,11 +34,10 @@ module Loveseat
         end
       end
 
-      def nested_resource_path(nested_resource = '')
-        components = @uri.request_uri.split('/')
-        components << "" if components.empty?
-        components << nested_resource
-        components.join('/')
+      def ==(other)
+        (self.uri == other.uri) and
+          (self.connection.address == other.connection.address) and
+          (self.connection.port == other.connection.port)
       end
 
       def put(options_or_body = '')
@@ -70,15 +78,21 @@ module Loveseat
             request_body.to_json
           end
 
-          if @username and @password
-            request.basic_auth(@username, @password)
-          end
+          request.basic_auth(@uri.user, @uri.password)
           
           response = @connection.start do |http|
             http.request(request)
           end
 
           [response, JSON.parse(response.body)]
+        end
+       
+      protected 
+        def nested_resource_path(nested_resource = '')
+          components = @uri.request_uri.split('/')
+          components << "" if components.empty?
+          components << nested_resource
+          components.join('/')
         end
     end
   end

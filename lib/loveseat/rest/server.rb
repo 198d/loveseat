@@ -1,8 +1,7 @@
 module Loveseat
   module Rest
     class Server < Resource
-      attr_reader :username
-      attr_reader :password
+      attr_reader :user, :password
 
       nested_resource :_all_dbs
       nested_resource :_config
@@ -11,10 +10,10 @@ module Loveseat
       nested_resource :_stats
       nested_resource :_active_tasks
 
-      def initialize(host, port, username=nil, password=nil)
-        @username = username
+      def initialize(host, port, user=nil, password=nil)
+        @user = user
         @password = password
-        super(Net::HTTP.new(host, port), '/', username, password)
+        super(Net::HTTP.new(host, port), '/', user, password)
       end
     end
   end

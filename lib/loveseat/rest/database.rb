@@ -13,7 +13,7 @@ module Loveseat
 
       def initialize(server, name)
         @server = server
-        super(server.connection, "/#{name}/", server.username, server.password)
+        super(server.connection, "/#{name}/", server.user, server.password)
       end
     end
   end
