@@ -15,7 +15,7 @@ module Loveseat
 
         add_instance_adapter_accessor!
 
-        unless @abstract
+        unless abstract?
           add_property(:_id, Property::String)
           add_property(:_rev, Property::String)
         end
@@ -57,7 +57,8 @@ module Loveseat
         map = {}
         properties.each do |name,value|
           type, default = value
-          map[name] = type.new(default)
+          clone = default.clone unless default.nil?
+          map[name] = type.new(clone)
         end
         map
       end
