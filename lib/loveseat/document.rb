@@ -1,6 +1,7 @@
 module Loveseat
   module Document
     @@registry = {}
+    @@uuids = []
     @@resolvers = [
       /^([A-Za-z:]+):/
     ]
@@ -14,10 +15,13 @@ module Loveseat
     end
     
     def self.next_id(server, klass)
-      response, body = server._uuids.get
-      response.value
+      if @@uuids.empty?
+        response, body = server._uuids.get(:query => {:count => 100})
+        response.value
+        @@uuids = body['uuids']
+      end
 
-      uuid = body['uuids'].first
+      uuid = @@uuids.pop
       "#{klass.name}:#{uuid}"
     end
 
