@@ -36,6 +36,10 @@ module Loveseat
       def raw(name, default = nil)
         @support.add_property(name, Property::Raw, default)
       end
+
+      def embeded(name, type)
+        @support.add_property(name, Property::EmbededDocument, type)
+      end
     end
   end
 end

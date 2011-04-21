@@ -18,17 +18,18 @@ module Loveseat
         unless abstract?
           add_property(:_id, Property::String)
           add_property(:_rev, Property::String)
+          add_property(:_attachments, Property::Hash)
         end
       end
 
-      def add_property(name,type,default = nil)
+      def add_property(name,type,*args)
         name = name.to_sym
-        alter_property(name,type,default)
+        alter_property(name,type,*args)
         add_instance_methods!(name)
       end
 
-      def alter_property(name,type,default = nil)
-        @properties[name] = [type, default]
+      def alter_property(name,type,*args)
+        @properties[name] = [type, args]
       end
 
       def to_doc(instance)
@@ -56,9 +57,9 @@ module Loveseat
       def generate_property_map
         map = {}
         properties.each do |name,value|
-          type, default = value
-          clone = default.clone unless default.nil?
-          map[name] = type.new(clone)
+          type, args = value
+          clone = Marshal.load(Marshal.dump(args)) 
+          map[name] = type.new(*clone)
         end
         map
       end

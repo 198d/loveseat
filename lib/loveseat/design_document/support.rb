@@ -15,7 +15,8 @@ module Loveseat
       end
 
       def add_view(name, options = {})
-        type, default = properties[:views]
+        type, args = properties[:views]
+        default = args.first
         default.merge!(
           name => options
         )

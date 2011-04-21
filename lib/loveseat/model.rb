@@ -16,6 +16,10 @@ module Loveseat
       Document.delete(self.class.database, self)
     end 
 
+    def to_json(*args)
+      Document.registry[self.class.name].to_doc(self)
+    end
+
     def self.get(id)
       unless id[self.name]
         id = [self.name, id].join(':')
