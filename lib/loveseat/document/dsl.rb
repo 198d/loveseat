@@ -40,6 +40,11 @@ module Loveseat
       def embeded(name, type)
         @support.add_property(name, Property::EmbededDocument, type)
       end
+
+      def timestamped
+        @support.add_property(:created, Property::Time, nil, :auto_now => :once)
+        @support.add_property(:updated, Property::Time, nil, :auto_now => :always)
+      end
     end
   end
 end

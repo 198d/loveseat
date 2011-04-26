@@ -19,6 +19,10 @@ module Loveseat
         def empty?
          @value.nil?
         end
+
+        def auto!
+          true
+        end
         
         private 
           def cast(value)

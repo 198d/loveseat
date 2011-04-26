@@ -25,9 +25,10 @@ module Loveseat
 
       def to_doc
         doc = {}
-        property_map.each do |k,v|
-          value = v.get 
-          doc[k.to_s] = value unless v.empty?
+        property_map.each do |name,property|
+          property.auto!
+          value = property.get 
+          doc[name.to_s] = value unless property.empty?
         end
         doc
       end
