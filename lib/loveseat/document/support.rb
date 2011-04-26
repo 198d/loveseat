@@ -33,24 +33,22 @@ module Loveseat
       end
 
       def to_doc(instance)
-        doc = {}
-        instance.__loveseat_instance_adapter.property_map.each do |k,v|
-          value = v.get 
-          doc[k] = value unless v.empty?
-        end
-        doc.to_json
+        instance.__loveseat_instance_adapter.to_doc
       end
 
-      def from_hash(doc)
-        object = nil
-        if singleton?
-          object = @klass
-        else
-          object = @klass.new
+      def to_json(instance)
+        to_doc(instance).to_json
+      end
+
+      def from_hash(doc, object = nil)
+        if object.nil?
+          if singleton?
+            object = @klass
+          else
+            object = @klass.new
+          end
         end
-        properties.each do |k,v|
-          object.send(:"#{k}=", doc[k.to_s])
-        end
+        object.__loveseat_instance_adapter.set(doc)
         object
       end
 

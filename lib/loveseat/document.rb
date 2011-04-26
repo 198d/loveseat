@@ -56,7 +56,7 @@ module Loveseat
       end
 
       resource = Rest::Document.new(db, object._id)
-      response, body = resource.put(support.to_doc(object))
+      response, body = resource.put(support.to_json(object))
 
       response.value
 

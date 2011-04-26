@@ -8,6 +8,11 @@ module Loveseat
       @@database = Rest::Database.new(@@server, connection_hash[:database])
     end
 
+    def initialize(attributes = {})
+      __loveseat_instance_adapter.set(attributes)
+      self
+    end
+
     def put
       Document.put(self.class.database, self)
     end
@@ -25,8 +30,18 @@ module Loveseat
       attach(stream, options.merge(:force => true))
     end
 
-    def to_json(*args)
+    def refresh!
+      new_object = self.class.get(self._id)
+      __loveseat_instance_adapter.set(new_object.to_doc)
+      self
+    end
+
+    def to_doc
       Document.registry[self.class.name].to_doc(self)
+    end
+
+    def to_json(*args)
+      Document.registry[self.class.name].to_json(self)
     end
 
     def self.get(id)

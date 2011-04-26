@@ -14,6 +14,24 @@ module Loveseat
         "#<Loveseat::Document::InstanceAdapter:#{@klass}>"
       end
 
+      def set(attributes)
+        attributes.each do |name, value|
+          property = self[name.to_sym]
+          unless property.nil?
+            property.set(value)
+          end
+        end
+      end
+
+      def to_doc
+        doc = {}
+        property_map.each do |k,v|
+          value = v.get 
+          doc[k.to_s] = value unless v.empty?
+        end
+        doc
+      end
+
       def property_map
         @property_map ||= @support.generate_property_map
       end
