@@ -16,6 +16,15 @@ module Loveseat
       Document.delete(self.class.database, self)
     end 
 
+    def attach(stream, options = {})
+      options = { :force => false }.merge(options) 
+      Document.attach(self.class.database, self, stream, options)
+    end
+
+    def attach!(stream, options = {})
+      attach(stream, options.merge(:force => true))
+    end
+
     def to_json(*args)
       Document.registry[self.class.name].to_doc(self)
     end

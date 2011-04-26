@@ -18,7 +18,7 @@ module Loveseat
         unless abstract?
           add_property(:_id, Property::String)
           add_property(:_rev, Property::String)
-          add_property(:_attachments, Property::Hash)
+          add_property(:_attachments, Property::Hash, {})
         end
       end
 

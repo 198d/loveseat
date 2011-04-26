@@ -1,3 +1,5 @@
+require 'mime/types'
+
 module Loveseat
   module Document
     @@registry = {}
@@ -58,6 +60,14 @@ module Loveseat
 
       response.value
 
+      object._attachments.each do |name,metadata|
+        data = metadata.delete('data')
+        unless data.nil?
+          metadata['stub'] = true
+          metadata['length'] = data.size
+        end
+      end
+
       object._rev = body["rev"]
       object
     end
@@ -83,6 +93,27 @@ module Loveseat
       body['rows'].map do |row|
         support.from_hash(row['doc'])
       end
+    end
+
+    def self.attach(db, object, stream, options={}) 
+      options = { :force => false }.merge(options)
+      name = options[:name] || File.basename(stream.path)
+      content_type = options[:content_type] ||
+        MIME::Types.type_for(name).first.to_s
+      if options[:force]
+        document = Rest::Document.new(db,object._id)
+        attachment = Rest::Attachment.new(document, name, content_type)
+        response, body = attachment.put({:query => {:rev => object._rev}, :body => stream.read})
+      else
+        object._attachments[name] = {
+          'content_type' => content_type,
+          'data' => [stream.read].pack('m')
+        }
+        return true
+      end
+
+      response.value
+      body['ok']
     end
 
     def self.delete(db, object)

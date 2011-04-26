@@ -14,4 +14,5 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('shoulda', '2.11.3')
 
   s.add_dependency('json', '1.4.6')
+  s.add_dependency('mime-types', '1.16')
 end

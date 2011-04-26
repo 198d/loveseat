@@ -69,15 +69,8 @@ module Loveseat
             request_uri = uri.request_uri
             request_body = options_or_body[:body]
           end
-          request = request_const.new(request_uri)
-          request['Content-Type'] = 'application/json'
-          
-          request.body = if request_body.is_a?(String)
-            request_body
-          else
-            request_body.to_json
-          end
 
+          request = build_request(request_const, request_uri, request_body)
           request.basic_auth(@uri.user, @uri.password)
           
           response = @connection.start do |http|
@@ -85,6 +78,19 @@ module Loveseat
           end
 
           [response, JSON.parse(response.body)]
+        end
+        
+        def build_request(const, uri, body) 
+          request = const.new(uri)
+          request['Content-Type'] = 'application/json'
+          
+          request.body = if body.is_a?(String)
+            body
+          else
+            body.to_json
+          end
+
+          request
         end
        
       protected 
