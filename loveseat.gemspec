@@ -12,6 +12,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('fakeweb', '1.3.0')
   s.add_development_dependency('rr', '1.0.2')
   s.add_development_dependency('shoulda', '2.11.3')
+  s.add_development_dependency('rspec', '2.5.0')
 
   s.add_dependency('json', '1.4.6')
   s.add_dependency('mime-types', '1.16')

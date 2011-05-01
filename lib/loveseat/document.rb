@@ -2,6 +2,9 @@ require 'mime/types'
 
 module Loveseat
   module Document
+    class NotRegisteredError < RuntimeError; end
+    class AbstractDocumentError < RuntimeError; end
+  
     @@registry = {}
     @@uuids = []
     @@resolvers = [
@@ -23,7 +26,7 @@ module Loveseat
         @@uuids = body['uuids']
       end
 
-      uuid = @@uuids.pop
+      uuid = @@uuids.shift
       "#{klass.name}:#{uuid}"
     end
 
@@ -48,8 +51,8 @@ module Loveseat
     def self.put(db, object)
       klass = ( object.instance_of?(Class) ) ? object : object.class
       support = Document.registry[klass.name]
-      raise "Not Registered" if support.nil?
-      raise "Abstract Document" if support.abstract?
+      raise NotRegisteredError.new("Not Registered") if support.nil?
+      raise AbstractDocumentError.new("Abstract Document") if support.abstract?
       
       if object._id.nil?
         object._id = next_id(db.server, object.class)
@@ -84,6 +87,8 @@ module Loveseat
 
     def self.all(db, klass)
       support = Document.registry[klass.name]
+      raise NotRegisteredError.new('Not Registered') if support.nil?
+
       resource = db._all_docs
       response, body = resource.get(:query => {:startkey => "#{klass.name}:".to_json,
                                                :endkey => "#{klass.name}:\ufff0".to_json,
@@ -120,7 +125,8 @@ module Loveseat
       resource = Rest::Document.new(db, object._id)
       response, body = resource.delete(:query => {:rev => object._rev})
       response.value
-      object._rev = nil
+      object._rev = body['rev']
+      body['ok']
     end
   end
 end

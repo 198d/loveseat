@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/testtask'
+require 'rspec/core/rake_task'
 
 Rake::TestTask.new do |t|
   t.libs << 'lib' << 'test'
@@ -8,4 +9,8 @@ Rake::TestTask.new do |t|
   t.verbose = false
 end
 
-task :default => ['test']
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = 'spec/*_spec.rb'
+end
+
+task :default => ['test', 'spec']

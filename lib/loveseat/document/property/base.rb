@@ -23,6 +23,10 @@ module Loveseat
         def auto!
           true
         end
+
+        def self.cast(value)
+          value
+        end
         
         private 
           def cast(value)
