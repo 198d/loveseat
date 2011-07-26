@@ -32,6 +32,11 @@ RSpec.configure do |config|
   config.mock_with :rr 
   config.include MockHTTPResponses
 
+  config.before(:each) do
+    @server = Loveseat::Rest::Server.new('localhost', 5984)
+    @database = Loveseat::Rest::Database.new(@server, 'loveseat_test')
+  end
+
   config.after(:each) do
     FakeWeb.clean_registry
   end

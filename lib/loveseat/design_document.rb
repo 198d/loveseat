@@ -3,6 +3,7 @@ module Loveseat
     Document.add_resolver(/_design\/([A-Za-z:]+)/)
 
     def self.setup(klass, options = {}, &block)
+      options.merge!(:singleton => true)
       Document.setup(klass, { :support => Support.new(klass, options) }, &block)
     end
     
