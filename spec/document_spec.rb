@@ -5,8 +5,6 @@ describe Loveseat::Document do
   before :each do 
     @klass = Class.new
     stub(@klass).name { 'TestClass' }
-    @server = Rest::Server.new('localhost', 5984)
-    @database = Rest::Database.new(@server, 'loveseat_test')
   end
  
   after :each do

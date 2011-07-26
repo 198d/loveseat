@@ -14,12 +14,28 @@ Loveseat::Model.connection = {
 # Loveseat::Model.database.put
 
 class Author < Loveseat::Model
+  class Hometown < Loveseat::Model
+    setup :abstract => true do
+      string :city
+      string :state
+      string :country
+    end
+  end
+
+  class Work < Loveseat::Model
+    setup :abstract => true do
+      string :title
+      date :published
+    end
+  end
+
   setup do
     string :name
-    date :birth
-    date :death
-    hash :hometown
-    array :works
+    time :birth
+    time :death
+    embeded :hometown, Hometown
+    embeded :works, Work
+    timestamped
   end
 end
 
@@ -30,42 +46,3 @@ class AuthorUtility < Loveseat::ViewSet
                 for(work in works) { emit(doc._id, works[work]); } }"
   end
 end
-
-sam = Author.new
-sam.name = 'Samuel Taylor Coleridge'
-
-# Will _cast_ these things to Date objects
-# by passing them through Date.parse
-sam.birth = '1772-10-21'
-sam.death = '1834-07-25'
-
-# Could be made to act more like an embeded
-# document and allow something like a Hometown
-# object to be used
-sam.hometown = {
-  'city' => 'Ottery St. Mary',
-  'state' => 'Devon',
-  'country' => 'England'
-}
-
-# Could be expanded to type check the elements of
-# the array to guarantee consistency
-sam.works = [
-  'Rime of the Ancient Mariner',
-  'Christabel',
-  'Kubla Khan'
-]
-
-# sam.put()   => #<Author>
-# sam._id #   => "Author:<uuid>"
-# sam._rev #  => "1:<hash>"
-
-# Guarantees the version of the design document we
-# have in this scope is the one in database
-AuthorUtility.latest!
-
-AuthorUtility.view(:all_works) # => [#<Loveseat::DesignDocument::ViewRow>,
-                                     #<Loveseat::DesignDocument::ViewRow>,
-                                     #<Loveseat::DesignDocument::ViewRow>]
-
-
