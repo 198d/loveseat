@@ -20,8 +20,7 @@ module Loveseat
           unless property.nil?
             property.set(value)
           else
-            # Add tmporary raw property to the property_map
-            # to deal with values not present in the schema
+            property_map[name.to_sym] = Property::Raw.new(value)
           end
         end
       end

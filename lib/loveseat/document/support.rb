@@ -14,6 +14,7 @@ module Loveseat
         @singleton = !!options[:singleton]
 
         add_instance_adapter_accessor!
+        add_generic_getter!
 
         unless abstract?
           add_property(:_id, Property::String)
@@ -77,6 +78,15 @@ module Loveseat
             def __loveseat_instance_adapter
               class_name = ( self.instance_of?(Class) ) ? self.name : self.class.name
               @__loveseat_instance_adapter ||= Loveseat::Document::InstanceAdapter.new(class_name)
+            end
+          SOURCE
+          eval_appropriately(method)
+        end
+
+        def add_generic_getter!
+          method = <<-SOURCE
+            def [](key)
+              __loveseat_instance_adapter[key].get
             end
           SOURCE
           eval_appropriately(method)
