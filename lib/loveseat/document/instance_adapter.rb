@@ -19,6 +19,9 @@ module Loveseat
           property = self[name.to_sym]
           unless property.nil?
             property.set(value)
+          else
+            # Add tmporary raw property to the property_map
+            # to deal with values not present in the schema
           end
         end
       end
@@ -26,7 +29,8 @@ module Loveseat
       def to_doc
         doc = {}
         property_map.each do |name,property|
-          property.auto!
+          property.now!
+          property.once! if property.empty?
           value = property.get 
           doc[name.to_s] = value unless property.empty?
         end

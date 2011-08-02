@@ -20,8 +20,12 @@ module Loveseat
          @value.nil?
         end
 
-        def auto!
-          true
+        def now!
+          nil
+        end
+
+        def once!
+          nil  
         end
 
         def self.cast(value)

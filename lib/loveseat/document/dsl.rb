@@ -42,8 +42,8 @@ module Loveseat
       end
 
       def timestamped
-        @support.add_property(:created, Property::Time, nil, :auto_now => :once)
-        @support.add_property(:updated, Property::Time, nil, :auto_now => :always)
+        @support.add_property(:created, Property::CreateTime, nil)
+        @support.add_property(:updated, Property::UpdateTime, nil)
       end
     end
   end
