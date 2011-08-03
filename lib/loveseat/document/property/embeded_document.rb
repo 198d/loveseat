@@ -3,7 +3,7 @@ module Loveseat
     module Property
       class EmbededDocument < Base
         def initialize(type)
-          @type = type
+          @type = type 
           super(nil)
         end
 

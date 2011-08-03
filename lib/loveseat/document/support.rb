@@ -1,7 +1,7 @@
 module Loveseat
   module Document
     class Support
-      attr_accessor :properties, :dsl
+      attr_reader :properties, :dsl, :klass
 
       TYPE = 0
       DEFAULT= 1
