@@ -48,7 +48,7 @@ module Loveseat
         begin
           type = @support.klass.const_get(klass_name.to_sym)
         rescue NameError
-          type = @support.klass.const_set(klass_name, Class.new(Model))
+          type = @support.klass.const_set(klass_name, Class.new(Base))
           Document.setup(type, {:abstract => true},  &block)
         end
 

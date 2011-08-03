@@ -1,5 +1,5 @@
 module Loveseat
-  class Model
+  class Model < Document::Base
     def self.connection=(connection_hash)
       @@server = Rest::Server.new(connection_hash[:host],
                                 connection_hash[:port],
@@ -16,13 +16,13 @@ module Loveseat
     def put
       Document.put(self.class.database, self)
     end
-  
+
     def delete
       Document.delete(self.class.database, self)
-    end 
+    end
 
     def attach(stream, options = {})
-      options = { :force => false }.merge(options) 
+      options = { :force => false }.merge(options)
       Document.attach(self.class.database, self, stream, options)
     end
 
@@ -34,14 +34,6 @@ module Loveseat
       new_object = self.class.get(self._id)
       __loveseat_instance_adapter.set(new_object.to_doc)
       self
-    end
-
-    def to_doc
-      Document.registry[self.class.name].to_doc(self)
-    end
-
-    def to_json(*args)
-      Document.registry[self.class.name].to_json(self)
     end
 
     def self.get(id)
