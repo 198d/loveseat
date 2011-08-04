@@ -25,5 +25,6 @@ require 'loveseat/design_document/dsl.rb'
 require 'loveseat/design_document/support.rb'
 require 'loveseat/design_document/view_row.rb'
 require 'loveseat/model.rb'
+require 'loveseat/embeded_model.rb'
 require 'loveseat/view_set.rb'
 

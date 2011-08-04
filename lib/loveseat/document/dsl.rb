@@ -44,12 +44,17 @@ module Loveseat
 
       def embeded(name, klass_name = nil, &block)
         klass_name ||= name.to_s.capitalize.gsub(/_([a-z])/) { |match| $1.capitalize }
+        type = nil
 
-        begin
-          type = @support.klass.const_get(klass_name.to_sym)
-        rescue NameError
-          type = @support.klass.const_set(klass_name, Class.new(Base))
-          Document.setup(type, {:abstract => true},  &block)
+        if klass_name.is_a?(Class)
+          type = klass_name
+        else
+          begin
+            type = @support.klass.const_get(klass_name.to_sym)
+          rescue NameError
+            type = @support.klass.const_set(klass_name, Class.new(Base))
+            Document.setup(type, {:abstract => true},  &block)
+          end
         end
 
         @support.add_property(name, Property::EmbededDocument, type)

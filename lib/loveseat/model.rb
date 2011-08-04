@@ -8,11 +8,6 @@ module Loveseat
       @@database = Rest::Database.new(@@server, connection_hash[:database])
     end
 
-    def initialize(attributes = {})
-      __loveseat_instance_adapter.set(attributes)
-      self
-    end
-
     def put
       Document.put(self.class.database, self)
     end
