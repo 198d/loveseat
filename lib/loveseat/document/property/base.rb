@@ -25,14 +25,18 @@ module Loveseat
         end
 
         def once!
-          nil  
+          nil
+        end
+
+        def to_doc
+          get
         end
 
         def self.cast(value)
           value
         end
-        
-        private 
+
+        private
           def cast(value)
             self.class.cast(value) unless value.nil?
           end

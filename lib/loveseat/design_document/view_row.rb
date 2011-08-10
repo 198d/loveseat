@@ -1,7 +1,9 @@
 module Loveseat
   module DesignDocument
     class ViewRow
-      Loveseat::Document.setup(self, :abstract => true) do 
+      attr_accessor :id, :key, :value, :doc
+
+      Loveseat::EmbededDocument.setup(self) do
         string :id
         raw :key
         raw :value

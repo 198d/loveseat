@@ -1,12 +1,10 @@
-class Note < Loveseat::EmbededModel
+Loveseat::Model.connection = { host: 'localhost', port: 5984, database: 'loveseat' }
+
+class Note
   STRINGS = ['C', 'C#/Db', 'D', 'D#/Eb',
     'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
 
-  setup do
-    integer :numerator
-    integer :denominator
-    integer :value
-  end
+  attr_accessor :numerator, :denominator, :value
 
   def self.value(note, which = 3)
     index = STRINGS.index(note)
@@ -18,16 +16,29 @@ class Note < Loveseat::EmbededModel
   end
 end
 
-class Song < Loveseat::Model
-  setup do
-    string :name
+class TimeSignature
+  attr_accessor :numerator, :denominator
+end
 
-    embeded :time_signature do
-      integer :numerator
-      integer :denominator
-    end
 
-    embeded :notes, Note
-  end
+class Song
+  attr_accessor :name, :time_signature, :notes
+end
+
+Loveseat::EmbededDocument.setup(Note) do
+  integer :numerator
+  integer :denominator
+  integer :value
+end
+
+Loveseat::EmbededDocument.setup(TimeSignature) do
+  integer :numerator
+  integer :denominator
+end
+
+Loveseat::Document.setup(Song) do
+  string :name
+  embeded :time_signature, TimeSignature
+  embeded :notes, Note
 end
 

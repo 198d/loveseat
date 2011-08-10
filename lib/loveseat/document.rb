@@ -4,13 +4,13 @@ module Loveseat
   module Document
     class NotRegisteredError < RuntimeError; end
     class AbstractDocumentError < RuntimeError; end
-  
+
     @@registry = {}
     @@uuids = []
     @@resolvers = [
       /^([A-Za-z:]+):/
     ]
-    
+
     def self.registry
       @@registry
     end
@@ -18,7 +18,7 @@ module Loveseat
     def self.add_resolver(regexp)
       @@resolvers << regexp
     end
-    
+
     def self.next_id(server, klass)
       if @@uuids.empty?
         response, body = server._uuids.get(:query => {:count => 100})
@@ -39,7 +39,7 @@ module Loveseat
       end
       nil
     end
-    
+
     def self.setup(klass, options = {}, &block)
       support = options.delete(:support) ||
                   Support.new(klass, options)
@@ -53,17 +53,23 @@ module Loveseat
       support = Document.registry[klass.name]
       raise NotRegisteredError.new("Not Registered") if support.nil?
       raise AbstractDocumentError.new("Abstract Document") if support.abstract?
-      
-      if object._id.nil?
-        object._id = next_id(db.server, object.class)
+
+      adapter = object.__loveseat_instance_adapter
+
+      _id = adapter[:_id]
+      _rev = adapter[:_rev]
+      _attachments = adapter[:_attachments]
+
+      if _id.get.nil?
+        _id.set(next_id(db.server, object.class))
       end
 
-      resource = Rest::Document.new(db, object._id)
-      response, body = resource.put(support.to_json(object))
+      resource = Rest::Document.new(db, _id.get)
+      response, body = resource.put(adapter.to_json)
 
       response.value
 
-      object._attachments.each do |name,metadata|
+      _attachments.get.each do |name,metadata|
         data = metadata.delete('data')
         unless data.nil?
           metadata['stub'] = true
@@ -71,7 +77,7 @@ module Loveseat
         end
       end
 
-      object._rev = body["rev"]
+      _rev.set(body["rev"])
       object
     end
 
@@ -100,17 +106,23 @@ module Loveseat
       end
     end
 
-    def self.attach(db, object, stream, options={}) 
+    def self.attach(db, object, stream, options={})
       options = { :force => false }.merge(options)
       name = options[:name] || File.basename(stream.path)
       content_type = options[:content_type] ||
         MIME::Types.type_for(name).first.to_s
+
+      adapter = object.__loveseat_instance_adapter
+      _id = adapter[:_id]
+      _rev = adapter[:_rev]
+      _attachments = adapter[:_attachments]
+
       if options[:force]
-        document = Rest::Document.new(db,object._id)
+        document = Rest::Document.new(db,_id.get)
         attachment = Rest::Attachment.new(document, name, content_type)
-        response, body = attachment.put({:query => {:rev => object._rev}, :body => stream.read})
+        response, body = attachment.put({:query => {:rev => _rev.get}, :body => stream.read})
       else
-        object._attachments[name] = {
+        _attachments.get[name] = {
           'content_type' => content_type,
           'data' => [stream.read].pack('m')
         }
@@ -122,10 +134,15 @@ module Loveseat
     end
 
     def self.delete(db, object)
-      resource = Rest::Document.new(db, object._id)
-      response, body = resource.delete(:query => {:rev => object._rev})
+      adapter = object.__loveseat_instance_adapter
+      _id = adapter[:_id]
+      _rev = adapter[:_rev]
+
+      resource = Rest::Document.new(db, _id.get)
+      response, body = resource.delete(:query => {:rev => _rev.get})
       response.value
-      object._rev = body['rev']
+
+      _rev.set(body['rev'])
       body['ok']
     end
   end

@@ -6,6 +6,7 @@ require 'loveseat/rest/attachment.rb'
 require 'loveseat/rest/database.rb'
 require 'loveseat/rest/design_document.rb'
 require 'loveseat/document.rb'
+require 'loveseat/embeded_document.rb'
 require 'loveseat/document/base.rb'
 require 'loveseat/document/dsl.rb'
 require 'loveseat/document/support.rb'
@@ -25,6 +26,34 @@ require 'loveseat/design_document/dsl.rb'
 require 'loveseat/design_document/support.rb'
 require 'loveseat/design_document/view_row.rb'
 require 'loveseat/model.rb'
-require 'loveseat/embeded_model.rb'
 require 'loveseat/view_set.rb'
+
+module Loveseat
+  def self.[](object)
+    clone = Marshal.load(Marshal.dump(object))
+    clone.extend WrappedDocument
+    clone
+  end
+
+  module WrappedDocument
+    def _id
+      self.__loveseat_instance_adapter[:_id].get
+    end
+    def _id=(other)
+      self.__loveseat_instance_adapter[:_id].set(other)
+    end
+    def _rev
+      self.__loveseat_instance_adapter[:_rev].get
+    end
+    def _rev=(other)
+      self.__loveseat_instance_adapter[:_rev].set(other)
+    end
+    def _attachments
+      self.__loveseat_instance_adapter[:_attachments].get
+    end
+    def _attachments=(other)
+      self.__loveseat_instance_adapter[:_attachments].set(other)
+    end
+  end
+end
 
