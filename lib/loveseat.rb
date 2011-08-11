@@ -28,13 +28,13 @@ require 'loveseat/design_document/view_row.rb'
 require 'loveseat/model.rb'
 require 'loveseat/view_set.rb'
 
-module Loveseat
-  def self.[](object)
-    clone = Marshal.load(Marshal.dump(object))
-    clone.extend WrappedDocument
-    clone
-  end
+def Loveseat(object)
+  clone = Marshal.load(Marshal.dump(object))
+  clone.extend Loveseat::WrappedDocument
+  clone
+end
 
+module Loveseat
   module WrappedDocument
     def _id
       self.__loveseat_instance_adapter[:_id].get
