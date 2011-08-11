@@ -88,7 +88,7 @@ module Loveseat
 
       klass = resolve(id)
       support = Document.registry[klass]
-      support.from_hash(body)
+      support.from_doc(body)
     end
 
     def self.all(db, klass)
@@ -102,7 +102,7 @@ module Loveseat
       response.value
 
       body['rows'].map do |row|
-        support.from_hash(row['doc'])
+        support.from_doc(row['doc'])
       end
     end
 

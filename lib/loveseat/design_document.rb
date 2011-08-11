@@ -1,12 +1,12 @@
 module Loveseat
-  module DesignDocument 
+  module DesignDocument
     Document.add_resolver(/_design\/([A-Za-z:]+)/)
 
     def self.setup(klass, options = {}, &block)
       options.merge!(:singleton => true)
       Document.setup(klass, { :support => Support.new(klass, options) }, &block)
     end
-    
+
     def self.all(db)
       resource = db._all_docs
       response, body = resource.get(:query => {:startkey => "_design/".to_json,
@@ -17,7 +17,7 @@ module Loveseat
       body['rows'].map do |row|
         klass = Document.resolve(row['id'])
         support = Document.registry[klass]
-        support.from_hash(row['doc'])
+        support.from_doc(row['doc'])
       end
     end
 
@@ -26,16 +26,16 @@ module Loveseat
       view_resource = resource._view(name)
 
       keys = options.delete(:keys)
-      
+
       response, body = if keys
         view_resource.post(:query => options, :body => {:keys => keys}.to_json)
       else
         view_resource.get(:query => options)
       end
       response.value
-      
+
       body['rows'].map do |row|
-        ViewRow.from_hash(row)
+        ViewRow.from_doc(row)
       end
     end
 

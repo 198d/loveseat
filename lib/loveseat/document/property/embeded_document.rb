@@ -23,7 +23,7 @@ module Loveseat
         private
           def cast(value)
             if value.is_a?(::Hash)
-              @support.from_hash(value)
+              @support.from_doc(value)
             elsif value.is_a?(@type)
               value
             elsif value.is_a?(::Array)

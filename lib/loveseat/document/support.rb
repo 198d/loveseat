@@ -31,7 +31,7 @@ module Loveseat
         @properties[name] = [type, args]
       end
 
-      def from_hash(doc, object = nil)
+      def from_doc(doc, object = nil)
         if object.nil?
           if singleton?
             object = @klass

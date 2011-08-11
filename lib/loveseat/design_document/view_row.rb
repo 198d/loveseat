@@ -10,8 +10,8 @@ module Loveseat
         hash :doc
       end
 
-      def self.from_hash(doc)
-        Document.registry[self.name].from_hash(doc)
+      def self.from_doc(doc)
+        Document.registry[self.name].from_doc(doc)
       end
     end
   end
