@@ -35,6 +35,31 @@ def Loveseat(object)
 end
 
 module Loveseat
+  def self.uri=(uri)
+    @uri = URI.parse(uri)
+    connection_hash = {
+      :host => uri.host,
+      :port => uri.port,
+      :user => uri.user,
+      :password => uri.password,
+      :database => uri.path.gsub('/', '')
+    }
+
+    @server = Rest::Server.new(connection_hash[:host],
+                                connection_hash[:port],
+                                connection_hash[:user],
+                                connection_hash[:password])
+    @database = Rest::Database.new(@server, connection_hash[:database])
+  end
+
+  def self.database
+    @database
+  end
+
+  def self.server
+    @server
+  end
+
   module WrappedDocument
     def _id
       self.__loveseat_instance_adapter[:_id].get

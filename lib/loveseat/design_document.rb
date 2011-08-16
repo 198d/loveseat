@@ -7,7 +7,7 @@ module Loveseat
       Document.setup(klass, { :support => Support.new(klass, options) }, &block)
     end
 
-    def self.all(db)
+    def self.all
       resource = db._all_docs
       response, body = resource.get(:query => {:startkey => "_design/".to_json,
                                                :endkey => "_design/\ufff0".to_json,
@@ -21,17 +21,18 @@ module Loveseat
       end
     end
 
-    def self.view(db, design_document, name, options = {})
+    def self.view(design_document, name, options = {})
       resource = Rest::DesignDocument.new(db, design_document.name)
       view_resource = resource._view(name)
 
       keys = options.delete(:keys)
 
-      response, body = if keys
-        view_resource.post(:query => options, :body => {:keys => keys}.to_json)
-      else
-        view_resource.get(:query => options)
-      end
+      response, body =
+        if keys
+          view_resource.post(:query => options, :body => {:keys => keys}.to_json)
+        else
+          view_resource.get(:query => options)
+        end
       response.value
 
       body['rows'].map do |row|

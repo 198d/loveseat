@@ -19,7 +19,7 @@ module Loveseat
       @@resolvers << regexp
     end
 
-    def self.next_id(server, klass)
+    def self.next_id(klass)
       if @@uuids.empty?
         response, body = server._uuids.get(:query => {:count => 100})
         response.value
@@ -48,7 +48,7 @@ module Loveseat
       support
     end
 
-    def self.put(db, object)
+    def self.put(object)
       klass = ( object.instance_of?(Class) ) ? object : object.class
       support = Document.registry[klass.name]
       raise NotRegisteredError.new("Not Registered") if support.nil?
@@ -61,10 +61,10 @@ module Loveseat
       _attachments = adapter[:_attachments]
 
       if _id.get.nil?
-        _id.set(next_id(db.server, object.class))
+        _id.set(next_id(object.class))
       end
 
-      resource = Rest::Document.new(db, _id.get)
+      resource = Rest::Document.new(database, _id.get)
       response, body = resource.put(adapter.to_json)
 
       response.value
@@ -81,8 +81,8 @@ module Loveseat
       object
     end
 
-    def self.get(db, id)
-      resource = Rest::Document.new(db, id)
+    def self.get(id)
+      resource = Rest::Document.new(database, id)
       response, body = resource.get
       response.value
 
@@ -91,11 +91,11 @@ module Loveseat
       support.from_doc(body)
     end
 
-    def self.all(db, klass)
+    def self.all(klass)
       support = Document.registry[klass.name]
       raise NotRegisteredError.new('Not Registered') if support.nil?
 
-      resource = db._all_docs
+      resource = database._all_docs
       response, body = resource.get(:query => {:startkey => "#{klass.name}:".to_json,
                                                :endkey => "#{klass.name}:\ufff0".to_json,
                                                :include_docs => true})
@@ -106,7 +106,7 @@ module Loveseat
       end
     end
 
-    def self.attach(db, object, stream, options={})
+    def self.attach(object, stream, options={})
       options = { :force => false }.merge(options)
       name = options[:name] || File.basename(stream.path)
       content_type = options[:content_type] ||
@@ -118,7 +118,7 @@ module Loveseat
       _attachments = adapter[:_attachments]
 
       if options[:force]
-        document = Rest::Document.new(db,_id.get)
+        document = Rest::Document.new(database, _id.get)
         attachment = Rest::Attachment.new(document, name, content_type)
         response, body = attachment.put({:query => {:rev => _rev.get}, :body => stream.read})
       else
@@ -133,17 +133,25 @@ module Loveseat
       body['ok']
     end
 
-    def self.delete(db, object)
+    def self.delete(object)
       adapter = object.__loveseat_instance_adapter
       _id = adapter[:_id]
       _rev = adapter[:_rev]
 
-      resource = Rest::Document.new(db, _id.get)
+      resource = Rest::Document.new(database, _id.get)
       response, body = resource.delete(:query => {:rev => _rev.get})
       response.value
 
       _rev.set(body['rev'])
       body['ok']
+    end
+
+    def self.server
+      Loveseat.server
+    end
+
+    def self.database
+      Loveseat.database
     end
   end
 end
