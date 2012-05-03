@@ -42,3 +42,5 @@ Loveseat::Document.setup(Song) do
   embeded :notes, Note
 end
 
+Loveseat::DesignDocument.setup(SongViews)
+
